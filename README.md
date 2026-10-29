@@ -1,4 +1,4 @@
-# Cookie Clicker Web App
+# Cookie Clicker Web Application
 
 A simple, interactive web application featuring a cookie in the center that tracks how many times it has been clicked.
 
@@ -21,12 +21,5 @@ A simple, interactive web application featuring a cookie in the center that trac
 
 ## How to Run
 
-1. Clone or download this repository.
-2. Open `index.html` directly in any standard web browser (e.g., Chrome, Firefox, Safari, Edge) or serve via a web server.
-3. Serve the files using a simple local web server:
-   ```bash
-   npx serve .
-   # or
-   python3 -m http.server 8000
-   ```
-4. Click the cookie and watch your count grow!
+1. Open `index.html` in any modern web browser (e.g. Chrome, Firefox, Safari, Edge).
+2. Click the cookie in the middle to start baking cookies!
