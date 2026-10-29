@@ -102,25 +102,6 @@
     </div>
   </div>
 
-  <script>
-    const countEl = document.getElementById('count');
-    const cookieBtn = document.getElementById('cookie-btn');
-    const resetBtn = document.getElementById('reset-btn');
-
-    let count = parseInt(localStorage.getItem('cookieCount')) || 0;
-    countEl.textContent = count;
-
-    cookieBtn.addEventListener('click', () => {
-      count++;
-      countEl.textContent = count;
-      localStorage.setItem('cookieCount', count);
-    });
-
-    resetBtn.addEventListener('click', () => {
-      count = 0;
-      countEl.textContent = count;
-      localStorage.setItem('cookieCount', count);
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
