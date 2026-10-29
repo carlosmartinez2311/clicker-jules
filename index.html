@@ -20,8 +20,9 @@
       justify-content: center;
       align-items: center;
       user-select: none;
-      overflow: hidden;
+      overflow-x: hidden;
       color: #4a2e16;
+      padding: 1.5rem 0;
     }
 
     .container {
@@ -32,7 +33,7 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       backdrop-filter: blur(8px);
       max-width: 90%;
-      width: 400px;
+      width: 440px;
       position: relative;
     }
 
@@ -44,7 +45,7 @@
     }
 
     .counter-container {
-      margin: 1.5rem 0;
+      margin: 1.2rem 0;
     }
 
     .counter-label {
@@ -65,7 +66,7 @@
 
     .cookie-wrapper {
       position: relative;
-      margin: 1.5rem auto;
+      margin: 1.2rem auto;
       width: 180px;
       height: 180px;
       cursor: pointer;
@@ -109,8 +110,153 @@
       }
     }
 
+    /* Achievements section */
+    .achievements-container {
+      margin-top: 1.5rem;
+      padding-top: 1.2rem;
+      border-top: 2px dashed rgba(140, 90, 50, 0.2);
+    }
+
+    .achievements-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #5c3a21;
+      margin-bottom: 1rem;
+    }
+
+    .trophies-grid {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .trophy-card {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.6);
+      border: 2px solid #e0b88f;
+      border-radius: 12px;
+      padding: 0.8rem 0.4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.3s ease;
+      opacity: 0.5;
+      filter: grayscale(1);
+      position: relative;
+    }
+
+    .trophy-card.unlocked {
+      opacity: 1;
+      filter: grayscale(0);
+      background: rgba(255, 250, 240, 0.95);
+      transform: translateY(-2px);
+    }
+
+    .trophy-card.unlocked.bronze {
+      border-color: #cd7f32;
+      box-shadow: 0 4px 12px rgba(205, 127, 50, 0.3);
+    }
+
+    .trophy-card.unlocked.silver {
+      border-color: #a0a0a0;
+      box-shadow: 0 4px 12px rgba(160, 160, 160, 0.3);
+    }
+
+    .trophy-card.unlocked.gold {
+      border-color: #ffd700;
+      box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+    }
+
+    .trophy-card.just-unlocked {
+      animation: popUnlock 0.6s ease-out;
+    }
+
+    @keyframes popUnlock {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    .trophy-icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 0.4rem;
+    }
+
+    .trophy-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #4a2e16;
+      margin-bottom: 0.2rem;
+    }
+
+    .trophy-req {
+      font-size: 0.7rem;
+      color: #8c5a32;
+      font-weight: 600;
+    }
+
+    .trophy-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 8px;
+      margin-top: 4px;
+      background: #ccc;
+      color: #555;
+    }
+
+    .trophy-card.unlocked.bronze .trophy-badge {
+      background: #cd7f32;
+      color: #fff;
+    }
+
+    .trophy-card.unlocked.silver .trophy-badge {
+      background: #a0a0a0;
+      color: #fff;
+    }
+
+    .trophy-card.unlocked.gold .trophy-badge {
+      background: #d4af37;
+      color: #fff;
+    }
+
+    /* Notification toast */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: #ffffff;
+      border-left: 6px solid #ffd700;
+      padding: 12px 18px;
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideIn 0.4s ease-out forwards;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(120%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
     .reset-btn {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       padding: 0.6rem 1.4rem;
       font-size: 0.95rem;
       font-weight: 600;
@@ -134,6 +280,8 @@
   </style>
 </head>
 <body>
+
+  <div id="toast-container" class="toast-container"></div>
 
   <div class="container">
     <h1>Cookie Clicker</h1>
@@ -161,6 +309,56 @@
       </svg>
     </div>
 
+    <div class="achievements-container">
+      <div class="achievements-title">🏆 Achievements</div>
+      <div class="trophies-grid">
+        <!-- Bronze Trophy (10 clicks) -->
+        <div class="trophy-card bronze" id="trophy-10" data-clicks="10">
+          <svg class="trophy-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 12H48V28C48 36.8366 40.8366 44 32 44C23.1634 44 16 36.8366 16 28V12Z" fill="#cd7f32" stroke="#8b4513" stroke-width="3"/>
+            <path d="M16 18H8C8 28 16 30 16 30" stroke="#8b4513" stroke-width="3" stroke-linecap="round"/>
+            <path d="M48 18H56C56 28 48 30 48 30" stroke="#8b4513" stroke-width="3" stroke-linecap="round"/>
+            <path d="M32 44V52" stroke="#8b4513" stroke-width="4"/>
+            <path d="M20 56H44" stroke="#8b4513" stroke-width="4" stroke-linecap="round"/>
+            <path d="M26 22L30 26L38 18" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="trophy-title">Bronze</div>
+          <div class="trophy-req">10 Clicks</div>
+          <div class="trophy-badge" id="badge-10">Locked</div>
+        </div>
+
+        <!-- Silver Trophy (100 clicks) -->
+        <div class="trophy-card silver" id="trophy-100" data-clicks="100">
+          <svg class="trophy-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 12H48V28C48 36.8366 40.8366 44 32 44C23.1634 44 16 36.8366 16 28V12Z" fill="#c0c0c0" stroke="#707070" stroke-width="3"/>
+            <path d="M16 18H8C8 28 16 30 16 30" stroke="#707070" stroke-width="3" stroke-linecap="round"/>
+            <path d="M48 18H56C56 28 48 30 48 30" stroke="#707070" stroke-width="3" stroke-linecap="round"/>
+            <path d="M32 44V52" stroke="#707070" stroke-width="4"/>
+            <path d="M20 56H44" stroke="#707070" stroke-width="4" stroke-linecap="round"/>
+            <path d="M26 22L30 26L38 18" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="trophy-title">Silver</div>
+          <div class="trophy-req">100 Clicks</div>
+          <div class="trophy-badge" id="badge-100">Locked</div>
+        </div>
+
+        <!-- Gold Trophy (1000 clicks) -->
+        <div class="trophy-card gold" id="trophy-1000" data-clicks="1000">
+          <svg class="trophy-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 12H48V28C48 36.8366 40.8366 44 32 44C23.1634 44 16 36.8366 16 28V12Z" fill="#ffd700" stroke="#b8860b" stroke-width="3"/>
+            <path d="M16 18H8C8 28 16 30 16 30" stroke="#b8860b" stroke-width="3" stroke-linecap="round"/>
+            <path d="M48 18H56C56 28 48 30 48 30" stroke="#b8860b" stroke-width="3" stroke-linecap="round"/>
+            <path d="M32 44V52" stroke="#b8860b" stroke-width="4"/>
+            <path d="M20 56H44" stroke="#b8860b" stroke-width="4" stroke-linecap="round"/>
+            <path d="M26 22L30 26L38 18" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="trophy-title">Gold</div>
+          <div class="trophy-req">1000 Clicks</div>
+          <div class="trophy-badge" id="badge-1000">Locked</div>
+        </div>
+      </div>
+    </div>
+
     <button class="reset-btn" id="reset-btn">Reset Counter</button>
   </div>
 
@@ -168,16 +366,68 @@
     const counterEl = document.getElementById('counter');
     const cookieEl = document.getElementById('cookie');
     const resetBtn = document.getElementById('reset-btn');
+    const toastContainer = document.getElementById('toast-container');
 
-    // Load initial count from localStorage
+    const achievements = [
+      { id: '10', clicks: 10, name: 'Bronze Trophy', cardEl: document.getElementById('trophy-10'), badgeEl: document.getElementById('badge-10') },
+      { id: '100', clicks: 100, name: 'Silver Trophy', cardEl: document.getElementById('trophy-100'), badgeEl: document.getElementById('badge-100') },
+      { id: '1000', clicks: 1000, name: 'Gold Trophy', cardEl: document.getElementById('trophy-1000'), badgeEl: document.getElementById('badge-1000') }
+    ];
+
+    // Load initial count and achievements state from localStorage
     let count = parseInt(localStorage.getItem('cookieCount')) || 0;
     counterEl.textContent = count;
 
-    function updateCounter(newCount) {
+    function showToast(title, message) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `
+        <span style="font-size: 1.5rem;">🏆</span>
+        <div>
+          <div style="font-weight: bold; font-size: 0.9rem; color: #4a2e16;">${title}</div>
+          <div style="font-size: 0.8rem; color: #7a4f2d;">${message}</div>
+        </div>
+      `;
+      toastContainer.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => toast.remove(), 500);
+      }, 3000);
+    }
+
+    function checkAchievements(isInitialLoad = false) {
+      achievements.forEach(ach => {
+        const isUnlocked = count >= ach.clicks;
+        const wasUnlocked = ach.cardEl.classList.contains('unlocked');
+
+        if (isUnlocked) {
+          if (!wasUnlocked) {
+            ach.cardEl.classList.add('unlocked');
+            ach.badgeEl.textContent = 'Unlocked!';
+            if (!isInitialLoad) {
+              ach.cardEl.classList.add('just-unlocked');
+              setTimeout(() => ach.cardEl.classList.remove('just-unlocked'), 600);
+              showToast('Achievement Unlocked!', `You earned the ${ach.name}! (${ach.clicks} Clicks)`);
+            }
+          }
+        } else {
+          ach.cardEl.classList.remove('unlocked', 'just-unlocked');
+          ach.badgeEl.textContent = 'Locked';
+        }
+      });
+    }
+
+    function updateCounter(newCount, isInitialLoad = false) {
       count = newCount;
       counterEl.textContent = count;
       localStorage.setItem('cookieCount', count);
+      checkAchievements(isInitialLoad);
     }
+
+    // Initial check on load
+    checkAchievements(true);
 
     cookieEl.addEventListener('click', (e) => {
       updateCounter(count + 1);
