@@ -16,6 +16,38 @@ function setCookie(name, value, days = 365) {
   document.cookie = name + "=" + (value || "0") + expires + "; path=/; SameSite=Lax";
 }
 
+// Disable right-click context menu
+document.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+});
+
+// Disable developer tools shortcuts
+document.addEventListener('keydown', (e) => {
+  const isCmdOrCtrl = e.ctrlKey || e.metaKey;
+  const key = e.key.toLowerCase();
+
+  // F12 key
+  if (e.key === 'F12' || e.keyCode === 123) {
+    e.preventDefault();
+    return false;
+  }
+
+  // Ctrl+Shift+I / Cmd+Option+I (Inspect element)
+  // Ctrl+Shift+J / Cmd+Option+J (Console)
+  // Ctrl+Shift+C / Cmd+Option+C (Inspect element selection)
+  if ((isCmdOrCtrl && e.shiftKey && (key === 'i' || key === 'j' || key === 'c')) ||
+      (e.metaKey && e.altKey && (key === 'i' || key === 'j' || key === 'c'))) {
+    e.preventDefault();
+    return false;
+  }
+
+  // Ctrl+U / Cmd+Option+U (View source)
+  if ((isCmdOrCtrl && key === 'u') || (e.metaKey && e.altKey && key === 'u')) {
+    e.preventDefault();
+    return false;
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   const countEl = document.getElementById('count');
   const cookieBtn = document.getElementById('cookie-btn');
